@@ -32,7 +32,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {
@@ -96,7 +96,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {
@@ -173,7 +173,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {
@@ -241,7 +241,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {
@@ -315,7 +315,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {
@@ -381,7 +381,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {
@@ -467,7 +467,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {
@@ -544,7 +544,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client"
 )
 
 func main() {

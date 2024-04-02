@@ -22,7 +22,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```go
-import openapi "github.com/smyachenkov/nightscout-openapi-client"
+import openapi "github.com/smyachenkov/nightscout-go-client"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:
