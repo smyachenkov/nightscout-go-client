@@ -1,0 +1,1326 @@
+openapi: 3.0.0
+info:
+  description: Own your DData with the Nightscout API
+  license:
+    name: AGPL 3
+    url: https://www.gnu.org/licenses/agpl.txt
+  title: Nightscout API
+  version: 14.2.3
+servers:
+- url: /api/v1
+security:
+- api_secret: []
+  token_in_url: []
+  jwtoken: []
+paths:
+  /entries/{spec}:
+    get:
+      description: |
+        The Entries endpoint returns information about the
+        Nightscout entries.
+      parameters:
+      - description: |
+          entry id, such as `55cf81bc436037528ec75fa5` or a type filter such
+          as `sgv`, `mbg`, etc.
+        explode: false
+        in: path
+        name: spec
+        required: true
+        schema:
+          default: sgv
+          type: string
+        style: simple
+      - description: |
+          The query used to find entries, support nested query syntax, for
+          example `find[dateString][$gte]=2015-08-27`.  All find parameters
+          are interpreted as strings.
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entries'
+          description: An array of entries
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entries'
+          description: Entries
+      summary: All Entries matching query
+      tags:
+      - Entries
+  /slice/{storage}/{field}/{type}/{prefix}/{regex}:
+    get:
+      description: The Entries endpoint returns information about the Nightscout entries.
+      parameters:
+      - description: "Prefix to use in constructing a prefix-based regex, default\
+          \ is `entries`."
+        explode: false
+        in: path
+        name: storage
+        required: true
+        schema:
+          default: entries
+          type: string
+        style: simple
+      - description: "Name of the field to use Regex against in query object, default\
+          \ is `dateString`."
+        explode: false
+        in: path
+        name: field
+        required: true
+        schema:
+          default: dateString
+          type: string
+        style: simple
+      - description: "The type field to search against, default is sgv."
+        explode: false
+        in: path
+        name: type
+        required: true
+        schema:
+          default: sgv
+          type: string
+        style: simple
+      - description: Prefix to use in constructing a prefix-based regex.
+        explode: false
+        in: path
+        name: prefix
+        required: true
+        schema:
+          default: "2015"
+          type: string
+        style: simple
+      - description: |
+          Tail part of regexp to use in expanding/construccting a query object.
+          Regexp also has bash-style brace and glob expansion applied to it,
+          creating ways to search for modal times of day, perhaps using
+          something like this syntax: `T{15..17}:.*`, this would search for
+          all records from 3pm to 5pm.
+        explode: false
+        in: path
+        name: regex
+        required: true
+        schema:
+          default: .*
+          type: string
+        style: simple
+      - description: |
+          The query used to find entries, support nested query syntax, for
+          example `find[dateString][$gte]=2015-08-27`.  All find parameters
+          are interpreted as strings.
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entries'
+          description: An array of entries
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: All Entries matching query
+      tags:
+      - Entries
+  /echo/{storage}/{spec}:
+    get:
+      description: |
+        Information about the mongo query object created by the query.
+      parameters:
+      - description: |
+          `entries`, or `treatments` to select the storage layer.
+        explode: false
+        in: path
+        name: storage
+        required: true
+        schema:
+          default: sgv
+          type: string
+        style: simple
+      - description: |
+          entry id, such as `55cf81bc436037528ec75fa5` or a type filter such
+          as `sgv`, `mbg`, etc.
+          This parameter is optional.
+        explode: false
+        in: path
+        name: spec
+        required: true
+        schema:
+          default: sgv
+          type: string
+        style: simple
+      - description: |
+          The query used to find entries, support nested query syntax, for
+          example `find[dateString][$gte]=2015-08-27`.  All find parameters
+          are interpreted as strings.
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MongoQuery'
+          description: An array of entries
+      summary: View generated Mongo Query object
+      tags:
+      - Entries
+  /times/echo/{prefix}/{regex}:
+    get:
+      description: Echo debug information about the query object constructed.
+      parameters:
+      - description: Prefix to use in constructing a prefix-based regex.
+        explode: false
+        in: path
+        name: prefix
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: |
+          Tail part of regexp to use in expanding/construccting a query object.
+          Regexp also has bash-style brace and glob expansion applied to it,
+          creating ways to search for modal times of day, perhaps using
+          something like this syntax: `T{15..17}:.*`, this would search for
+          all records from 3pm to 5pm.
+        explode: false
+        in: path
+        name: regex
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "The query used to find entries, support nested query syntax,\
+          \ for example `find[dateString][$gte]=2015-08-27`.  All find parameters\
+          \ are interpreted as strings."
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MongoQuery'
+          description: An array of entries
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Echo the query object to be used.
+      tags:
+      - Entries
+  /times/{prefix}/{regex}:
+    get:
+      description: The Entries endpoint returns information about the Nightscout entries.
+      parameters:
+      - description: Prefix to use in constructing a prefix-based regex.
+        explode: false
+        in: path
+        name: prefix
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: |
+          Tail part of regexp to use in expanding/construccting a query object.
+          Regexp also has bash-style brace and glob expansion applied to it,
+          creating ways to search for modal times of day, perhaps using
+          something like this syntax: `T{15..17}:.*`, this would search for
+          all records from 3pm to 5pm.
+        explode: false
+        in: path
+        name: regex
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "The query used to find entries, support nested query syntax,\
+          \ for example `find[dateString][$gte]=2015-08-27`.  All find parameters\
+          \ are interpreted as strings."
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entries'
+          description: An array of entries
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: All Entries matching query
+      tags:
+      - Entries
+  /entries:
+    delete:
+      description: "Remove entries, same search syntax as GET."
+      operationId: removeEntries
+      parameters:
+      - description: "The query used to find entries, support nested query syntax,\
+          \ for example `find[dateString][$gte]=2015-08-27`.  All find parameters\
+          \ are interpreted as strings."
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          description: Empty list is success.
+      summary: Delete entries matching query.
+      tags:
+      - Entries
+    get:
+      description: The Entries endpoint returns information about the Nightscout entries.
+      parameters:
+      - description: "The query used to find entries, support nested query syntax,\
+          \ for example `find[dateString][$gte]=2015-08-27`.  All find parameters\
+          \ are interpreted as strings."
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entries'
+          description: An array of entries
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: All Entries matching query
+      tags:
+      - Entries
+    post:
+      description: ""
+      operationId: addEntries
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Entries'
+          text/plain:
+            schema:
+              $ref: '#/components/schemas/Entries'
+        description: Entries to be uploaded.
+        required: true
+      responses:
+        "200":
+          description: Rejected list of entries.  Empty list is success.
+        "405":
+          description: Invalid input
+      summary: Add new entries.
+      tags:
+      - Entries
+  /treatments:
+    delete:
+      description: "Remove treatments, same search syntax as GET."
+      operationId: removeTreatments
+      parameters:
+      - description: "The query used to find treatments to delete, support nested\
+          \ query syntax, for example `find[insulin][$gte]=3`. All find parameters\
+          \ are interpreted as strings."
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          description: Empty list is success.
+      summary: Delete treatments matching query.
+      tags:
+      - Treatments
+    get:
+      description: The Treatments endpoint returns information about the Nightscout
+        treatments.
+      parameters:
+      - description: "The query used to find entries, supports nested query syntax.\
+          \  Examples `find[insulin][$gte]=3` `find[carb][$gte]=100` `find[eventType]=Correction+Bolus`\
+          \ All find parameters are interpreted as strings."
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of entries to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Treatments'
+          description: An array of treatments
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Treatments
+      tags:
+      - Treatments
+    post:
+      description: ""
+      operationId: addTreatments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Treatments'
+        description: Treatments to be uploaded.
+        required: true
+      responses:
+        "200":
+          description: Rejected list of treatments.  Empty list is success.
+        "405":
+          description: Invalid input
+      summary: Add new treatments.
+      tags:
+      - Treatments
+  /treatments/{spec}:
+    delete:
+      description: |
+        The Treatments endpoint returns information about the
+        Nightscout devicestatus records.
+      parameters:
+      - description: |
+          treatment id, such as `55cf81bc436037528ec75fa5`
+        explode: false
+        in: path
+        name: spec
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteStatus'
+          description: A status record of the delete.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Delete treatments record with id provided in spec
+      tags:
+      - Treatments
+  /profile:
+    get:
+      description: The Profile endpoint returns information about the Nightscout Treatment
+        Profiles.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: An array of treatments
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Profile
+      tags:
+      - Profile
+  /status:
+    get:
+      description: "Server side status, default settings and capabilities."
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Status'
+          description: Server capabilities and status.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Status
+      tags:
+      - Status
+  /devicestatus/:
+    delete:
+      description: |
+        The Devicestatus endpoint returns information about the
+        Nightscout devicestatus records.
+      parameters:
+      - description: |
+          The query used to find entries, support nested query syntax, for
+          example `find[created_at][$gte]=2015-08-27`.  All find parameters
+          are interpreted as strings.
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteStatus'
+          description: A status record of the delete.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Delete all Devicestatus records matching query
+      tags:
+      - Devicestatus
+    get:
+      description: The Devicestatus endpoint returns information about the Nightscout
+        devicestatus records.
+      parameters:
+      - description: "The query used to find entries, support nested query syntax,\
+          \ for example `find[dateString][$gte]=2015-08-27`.  All find parameters\
+          \ are interpreted as strings."
+        explode: true
+        in: query
+        name: find
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Number of devicestatus records to return.
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          type: number
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Devicestatuses'
+          description: An array of devicestatus entries
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: All Devicestatuses matching query
+      tags:
+      - Devicestatus
+    post:
+      description: ""
+      operationId: addDevicestatuses
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Devicestatuses'
+        description: Device statuses to be uploaded.
+        required: true
+      responses:
+        "200":
+          description: Rejected list of device statuses.  Empty list is success.
+        "405":
+          description: Invalid input
+      summary: Add new devicestatus records.
+      tags:
+      - Devicestatus
+  /devicestatus/{spec}:
+    delete:
+      description: |
+        The Devicestatus endpoint returns information about the
+        Nightscout devicestatus records.
+      parameters:
+      - description: |
+          entry id, such as `55cf81bc436037528ec75fa5`
+        explode: false
+        in: path
+        name: spec
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteStatus'
+          description: A status record of the delete.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unexpected error
+      summary: Delete devicestatus record with id provided in spec
+      tags:
+      - Devicestatus
+components:
+  schemas:
+    Entry:
+      example:
+        date: 0.8008281904610115
+        rssi: 2.3021358869347655
+        sgv: 6.027456183070403
+        filtered: 5.962133916683182
+        noise: 1.4658129805029452
+        dateString: dateString
+        type: type
+        unfiltered: 5.637376656633329
+        direction: direction
+      properties:
+        type:
+          description: "sgv, mbg, cal, etc"
+          type: string
+        dateString:
+          description: "dateString, MUST be ISO `8601` format date parseable by Javascript\
+            \ Date()"
+          type: string
+        date:
+          description: Epoch
+          type: number
+        sgv:
+          description: The glucose reading. (only available for sgv types)
+          type: number
+        direction:
+          description: Direction of glucose trend reported by CGM. (only available
+            for sgv types)
+          type: string
+        noise:
+          description: Noise level at time of reading. (only available for sgv types)
+          type: number
+        filtered:
+          description: The raw filtered value directly from CGM transmitter. (only
+            available for sgv types)
+          type: number
+        unfiltered:
+          description: The raw unfiltered value directly from CGM transmitter. (only
+            available for sgv types)
+          type: number
+        rssi:
+          description: The signal strength from CGM transmitter. (only available for
+            sgv types)
+          type: number
+    Entries:
+      items:
+        $ref: '#/components/schemas/Entry'
+      type: array
+    Devicestatus:
+      example:
+        loop: loop
+        uploader:
+          batteryVoltage: 1.4658129805029452
+          battery: 5.962133916683182
+        created_at: created_at
+        pump:
+          clock: clock
+          reservoir: 6.027456183070403
+          battery:
+            status: status
+            voltage: 0.8008281904610115
+          status:
+            bolusing: true
+            suspended: true
+            status: status
+            timestamp: timestamp
+        device: device
+        xdripjs:
+          calType: calType
+          sessionStart: 7.457744773683766
+          txId: txId
+          stateString: stateString
+          unfiltered: 2.027123023002322
+          txStatusString: txStatusString
+          mode: mode
+          filtered: 4.145608029883936
+          txActivation: 7.061401241503109
+          noise: 7.386281948385884
+          temperature: 9.965781217890562
+          state: 5.637376656633329
+          timestamp: 9.301444243932576
+          rssi: 3.616076749251911
+          lastCalibrationDate: 6.84685269835264
+          slope: 1.0246457001441578
+          noiseString: 1.2315135367772556
+          resistance: 9.369310271410669
+          txStatus: 2.3021358869347655
+          batteryTimestamp: 1.1730742509559433
+          intercept: 1.4894159098541704
+          voltagea: 4.965218492984954
+          stateStringShort: stateStringShort
+          txStatusStringShort: txStatusStringShort
+          voltageb: 5.025004791520295
+        openaps: openaps
+      properties:
+        device:
+          description: Device type and hostname for example openaps://hostname
+          type: string
+        created_at:
+          description: "dateString, MUST be ISO `8601` format date parseable by Javascript\
+            \ Date()"
+          type: string
+        openaps:
+          description: "OpenAPS devicestatus record - TODO: Fill Out Details"
+          type: string
+        loop:
+          description: "Loop devicestatus record - TODO: Fill Out Details"
+          type: string
+        pump:
+          $ref: '#/components/schemas/pump'
+        uploader:
+          $ref: '#/components/schemas/uploader'
+        xdripjs:
+          $ref: '#/components/schemas/xdripjs'
+      required:
+      - created_at
+      - device
+    Devicestatuses:
+      items:
+        $ref: '#/components/schemas/Devicestatus'
+      type: array
+    pump:
+      example:
+        clock: clock
+        reservoir: 6.027456183070403
+        battery:
+          status: status
+          voltage: 0.8008281904610115
+        status:
+          bolusing: true
+          suspended: true
+          status: status
+          timestamp: timestamp
+      properties:
+        clock:
+          description: "dateString, MUST be ISO `8601` format date parseable by Javascript\
+            \ Date()"
+          type: string
+        battery:
+          $ref: '#/components/schemas/pumpbattery'
+        reservoir:
+          description: Amount of insulin remaining in pump reservoir
+          type: number
+        status:
+          $ref: '#/components/schemas/pumpstatus'
+    pumpbattery:
+      example:
+        status: status
+        voltage: 0.8008281904610115
+      properties:
+        status:
+          description: Pump Battery Status String
+          type: string
+        voltage:
+          description: Pump Battery Voltage Level
+          type: number
+    pumpstatus:
+      example:
+        bolusing: true
+        suspended: true
+        status: status
+        timestamp: timestamp
+      properties:
+        status:
+          description: Pump Status String
+          type: string
+        bolusing:
+          description: Is Pump Bolusing
+          type: boolean
+        suspended:
+          description: Is Pump Suspended
+          type: boolean
+        timestamp:
+          description: "dateString, MUST be ISO `8601` format date parseable by Javascript\
+            \ Date()"
+          type: string
+    uploader:
+      example:
+        batteryVoltage: 1.4658129805029452
+        battery: 5.962133916683182
+      properties:
+        batteryVoltage:
+          description: Uploader Device Battery Voltage
+          type: number
+        battery:
+          description: Uploader Device Battery Percentage Charge Remaining
+          type: number
+    xdripjs:
+      example:
+        calType: calType
+        sessionStart: 7.457744773683766
+        txId: txId
+        stateString: stateString
+        unfiltered: 2.027123023002322
+        txStatusString: txStatusString
+        mode: mode
+        filtered: 4.145608029883936
+        txActivation: 7.061401241503109
+        noise: 7.386281948385884
+        temperature: 9.965781217890562
+        state: 5.637376656633329
+        timestamp: 9.301444243932576
+        rssi: 3.616076749251911
+        lastCalibrationDate: 6.84685269835264
+        slope: 1.0246457001441578
+        noiseString: 1.2315135367772556
+        resistance: 9.369310271410669
+        txStatus: 2.3021358869347655
+        batteryTimestamp: 1.1730742509559433
+        intercept: 1.4894159098541704
+        voltagea: 4.965218492984954
+        stateStringShort: stateStringShort
+        txStatusStringShort: txStatusStringShort
+        voltageb: 5.025004791520295
+      properties:
+        state:
+          description: CGM Sensor Session State Code
+          type: number
+        stateString:
+          description: CGM Sensor Session State String
+          type: string
+        stateStringShort:
+          description: CGM Sensor Session State Short String
+          type: string
+        txId:
+          description: CGM Transmitter ID
+          type: string
+        txStatus:
+          description: CGM Transmitter Status
+          type: number
+        txStatusString:
+          description: CGM Transmitter Status String
+          type: string
+        txStatusStringShort:
+          description: CGM Transmitter Status Short String
+          type: string
+        txActivation:
+          description: CGM Transmitter Activation Milliseconds After Epoch
+          type: number
+        mode:
+          description: "Mode xdrip-js Application Operationg: expired, not expired,\
+            \ etc."
+          type: string
+        timestamp:
+          description: Last Update Milliseconds After Epoch
+          type: number
+        rssi:
+          description: Receive Signal Strength of Transmitter
+          type: number
+        unfiltered:
+          description: Most Recent Raw Unfiltered Glucose
+          type: number
+        filtered:
+          description: Most Recent Raw Filtered Glucose
+          type: number
+        noise:
+          description: "Calculated Noise Value - 1=Clean, 2=Light, 3=Medium, 4=Heavy"
+          type: number
+        noiseString:
+          description: Noise Value String
+          type: number
+        slope:
+          description: Calibration Slope Value
+          type: number
+        intercept:
+          description: Calibration Intercept Value
+          type: number
+        calType:
+          description: Algorithm Used to Calculate Calibration Values
+          type: string
+        lastCalibrationDate:
+          description: Most Recent Calibration Milliseconds After Epoch
+          type: number
+        sessionStart:
+          description: Sensor Session Start Milliseconds After Epoch
+          type: number
+        batteryTimestamp:
+          description: Most Recent Batter Status Read Milliseconds After Epoch
+          type: number
+        voltagea:
+          description: Voltage of Battery A
+          type: number
+        voltageb:
+          description: Voltage of Battery B
+          type: number
+        temperature:
+          description: Transmitter Temperature
+          type: number
+        resistance:
+          description: Sensor Resistance
+          type: number
+    Treatment:
+      example:
+        glucose: glucose
+        notes: notes
+        insulin: 5.962133916683182
+        carbs: 0.8008281904610115
+        created_at: created_at
+        eventType: eventType
+        glucoseType: glucoseType
+        units: units
+        transmitterId: transmitterId
+        enteredBy: enteredBy
+        protein: 6.027456183070403
+        fat: 1.4658129805029452
+        _id: _id
+        sensorCode: sensorCode
+      properties:
+        _id:
+          description: Internally assigned id.
+          type: string
+        eventType:
+          description: The type of treatment event.
+          type: string
+        created_at:
+          description: "The date of the event, might be set retroactively ."
+          type: string
+        glucose:
+          description: Current glucose.
+          type: string
+        glucoseType:
+          description: "Method used to obtain glucose, Finger or Sensor."
+          type: string
+        carbs:
+          description: Amount of carbs consumed in grams.
+          type: number
+        protein:
+          description: Amount of protein consumed in grams.
+          type: number
+        fat:
+          description: Amount of fat consumed in grams.
+          type: number
+        insulin:
+          description: "Amount of insulin, if any."
+          type: number
+        units:
+          description: "The units for the glucose value, mg/dl or mmol."
+          type: string
+        transmitterId:
+          description: The transmitter ID of the transmitter being started.
+          type: string
+        sensorCode:
+          description: The code used to start a Dexcom G6 sensor.
+          type: string
+        notes:
+          description: Description/notes of treatment.
+          type: string
+        enteredBy:
+          description: Who entered the treatment.
+          type: string
+    Treatments:
+      items:
+        $ref: '#/components/schemas/Treatment'
+      type: array
+    Profile:
+      example:
+        sens: 0
+        carbratio: 1
+        carbs_hr: 5
+        _id: _id
+        dia: 6
+      properties:
+        sens:
+          description: Internally assigned id
+          type: integer
+        dia:
+          description: Internally assigned id
+          type: integer
+        carbratio:
+          description: Internally assigned id
+          type: integer
+        carbs_hr:
+          description: Internally assigned id
+          type: integer
+        _id:
+          description: Internally assigned id
+          type: string
+    Status:
+      example:
+        apiEnabled: true
+        head: head
+        settings:
+          alarmTimeagoUrgentMins: 6.027456183070403
+          alarmHigh: true
+          alarmTimeagoUrgent: true
+          customTitle: customTitle
+          language: language
+          showPlugins: showPlugins
+          units: units
+          alarmTypes:
+          - alarmTypes
+          - alarmTypes
+          alarmUrgentHigh: true
+          alarmLow: true
+          thresholds:
+            bg_target_top: 5
+            bg_low: 2
+            bg_target_bottom: 5
+            bg_high: 1
+          alarmTimeagoWarn: true
+          enable:
+          - enable
+          - enable
+          timeFormat: "12"
+          alarmUrgentLow: true
+          theme: theme
+          showRawbg: showRawbg
+          alarmTimeagoWarnMins: 0.8008281904610115
+          nightMode: true
+        name: name
+        extendedSettings: ""
+        careportalEnabled: true
+        version: version
+      properties:
+        apiEnabled:
+          description: Whether or not the REST API is enabled.
+          type: boolean
+        careportalEnabled:
+          description: Whether or not the careportal is enabled in the API.
+          type: boolean
+        head:
+          description: The git identifier for the running instance of the app.
+          type: string
+        name:
+          description: Nightscout (static)
+          type: string
+        version:
+          description: The version label of the app.
+          type: string
+        settings:
+          $ref: '#/components/schemas/Settings'
+        extendedSettings:
+          description: Extended settings of client side plugins
+    Settings:
+      example:
+        alarmTimeagoUrgentMins: 6.027456183070403
+        alarmHigh: true
+        alarmTimeagoUrgent: true
+        customTitle: customTitle
+        language: language
+        showPlugins: showPlugins
+        units: units
+        alarmTypes:
+        - alarmTypes
+        - alarmTypes
+        alarmUrgentHigh: true
+        alarmLow: true
+        thresholds:
+          bg_target_top: 5
+          bg_low: 2
+          bg_target_bottom: 5
+          bg_high: 1
+        alarmTimeagoWarn: true
+        enable:
+        - enable
+        - enable
+        timeFormat: "12"
+        alarmUrgentLow: true
+        theme: theme
+        showRawbg: showRawbg
+        alarmTimeagoWarnMins: 0.8008281904610115
+        nightMode: true
+      properties:
+        units:
+          description: Default units for glucose measurements across the server.
+          type: string
+        timeFormat:
+          description: Default time format
+          enum:
+          - "12"
+          - "24"
+          type: string
+        customTitle:
+          description: Default custom title to be displayed system wide.
+          type: string
+        nightMode:
+          description: Should Night mode be enabled by default?
+          type: boolean
+        theme:
+          description: "Default theme to be displayed system wide, `default`, `colors`,\
+            \ `colorblindfriendly`."
+          type: string
+        language:
+          description: Default language code to be used system wide
+          type: string
+        showPlugins:
+          description: Plugins that should be shown by default
+          type: string
+        showRawbg:
+          description: "If Raw BG is enabled when should it be shown? `never`, `always`,\
+            \ `noise`"
+          type: string
+        alarmTypes:
+          description: "Enabled alarm types, can be multiple"
+          enum:
+          - simple
+          - predict
+          items:
+            type: string
+          type: array
+        alarmUrgentHigh:
+          description: "Enable/Disable client-side Urgent High alarms by default,\
+            \ for use with `simple` alarms."
+          type: boolean
+        alarmHigh:
+          description: "Enable/Disable client-side High alarms by default, for use\
+            \ with `simple` alarms."
+          type: boolean
+        alarmLow:
+          description: "Enable/Disable client-side Low alarms by default, for use\
+            \ with `simple` alarms."
+          type: boolean
+        alarmUrgentLow:
+          description: "Enable/Disable client-side Urgent Low alarms by default, for\
+            \ use with `simple` alarms."
+          type: boolean
+        alarmTimeagoWarn:
+          description: Enable/Disable client-side stale data alarms by default.
+          type: boolean
+        alarmTimeagoWarnMins:
+          description: Number of minutes before a stale data warning is generated.
+          type: number
+        alarmTimeagoUrgent:
+          description: Enable/Disable client-side urgent stale data alarms by default.
+          type: boolean
+        alarmTimeagoUrgentMins:
+          description: Number of minutes before a stale data warning is generated.
+          type: number
+        enable:
+          description: Enabled features
+          items:
+            type: string
+          type: array
+        thresholds:
+          $ref: '#/components/schemas/Threshold'
+    Threshold:
+      example:
+        bg_target_top: 5
+        bg_low: 2
+        bg_target_bottom: 5
+        bg_high: 1
+      properties:
+        bg_high:
+          description: High BG range.
+          type: integer
+        bg_target_top:
+          description: Top of target range.
+          type: integer
+        bg_target_bottom:
+          description: Bottom of target range.
+          type: integer
+        bg_low:
+          description: Low BG range.
+          type: integer
+    ExtendedSettings:
+      description: Extended settings of client side plugins
+    MongoQuery:
+      description: Mongo Query object.
+    Error:
+      example:
+        code: 0
+        message: message
+        fields: "{}"
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+        fields:
+          type: object
+    DeleteStatus:
+      example:
+        electionId: electionId
+        $clusterTime: $clusterTime
+        optime:
+          t: 6
+          ts: ts
+        ok: 1
+        "n": 0
+        operationTime: operationTime
+      properties:
+        "n":
+          description: Number of records deleted
+          format: int32
+          type: integer
+        optime:
+          $ref: '#/components/schemas/optime'
+        electionId:
+          description: Election id of operation
+          type: string
+        ok:
+          description: Status of whether delete was successful
+          format: int32
+          type: integer
+        operationTime:
+          description: Time delete operation was executed
+          type: string
+        $clusterTime:
+          description: Information about execution time in cluster environment
+          type: string
+    optime:
+      example:
+        t: 6
+        ts: ts
+      properties:
+        ts:
+          description: Time the operation started
+          type: string
+        t:
+          description: Time the operation took to complete
+          format: int32
+          type: integer
+  securitySchemes:
+    api_secret:
+      description: The hash of the API_SECRET env var
+      in: header
+      name: api-secret
+      type: apiKey
+    token_in_url:
+      description: Add token as query item in the URL. You can manage access Token
+        in `/admin`. This uses json webtokens.
+      in: query
+      name: token
+      type: apiKey
+    jwtoken:
+      bearerFormat: JWT
+      description: Use this if you know the temporary json webtoken.
+      scheme: bearer
+      type: http
