@@ -21,6 +21,6 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
     -g go \
     -o /local/generated \
     --git-user-id smyachenkov \
-    --git-repo-id nightscout-go-client && \
+    --git-repo-id nightscout-go-client/generated && \
     cd generated && go mod tidy
 ```

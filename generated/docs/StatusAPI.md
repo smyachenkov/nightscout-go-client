@@ -25,7 +25,7 @@ import (
 	"context"
 	"fmt"
 	"os"
-	openapiclient "github.com/smyachenkov/nightscout-go-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client/generated"
 )
 
 func main() {
