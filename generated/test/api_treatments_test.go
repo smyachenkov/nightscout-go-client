@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/smyachenkov/nightscout-openapi-client"
+	openapiclient "github.com/smyachenkov/nightscout-go-client/generated"
 )
 
 func Test_openapi_TreatmentsAPIService(t *testing.T) {
