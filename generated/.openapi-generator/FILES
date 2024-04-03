@@ -48,9 +48,4 @@ model_treatment.go
 model_uploader.go
 model_xdripjs.go
 response.go
-test/api_devicestatus_test.go
-test/api_entries_test.go
-test/api_profile_test.go
-test/api_status_test.go
-test/api_treatments_test.go
 utils.go

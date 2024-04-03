@@ -22,7 +22,7 @@ type Settings struct {
 	// Default units for glucose measurements across the server.
 	Units *string `json:"units,omitempty"`
 	// Default time format
-	TimeFormat *string `json:"timeFormat,omitempty"`
+	TimeFormat *float32 `json:"timeFormat,omitempty"`
 	// Default custom title to be displayed system wide.
 	CustomTitle *string `json:"customTitle,omitempty"`
 	// Should Night mode be enabled by default?
@@ -108,9 +108,9 @@ func (o *Settings) SetUnits(v string) {
 }
 
 // GetTimeFormat returns the TimeFormat field value if set, zero value otherwise.
-func (o *Settings) GetTimeFormat() string {
+func (o *Settings) GetTimeFormat() float32 {
 	if o == nil || IsNil(o.TimeFormat) {
-		var ret string
+		var ret float32
 		return ret
 	}
 	return *o.TimeFormat
@@ -118,7 +118,7 @@ func (o *Settings) GetTimeFormat() string {
 
 // GetTimeFormatOk returns a tuple with the TimeFormat field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *Settings) GetTimeFormatOk() (*string, bool) {
+func (o *Settings) GetTimeFormatOk() (*float32, bool) {
 	if o == nil || IsNil(o.TimeFormat) {
 		return nil, false
 	}
@@ -134,8 +134,8 @@ func (o *Settings) HasTimeFormat() bool {
 	return false
 }
 
-// SetTimeFormat gets a reference to the given string and assigns it to the TimeFormat field.
-func (o *Settings) SetTimeFormat(v string) {
+// SetTimeFormat gets a reference to the given float32 and assigns it to the TimeFormat field.
+func (o *Settings) SetTimeFormat(v float32) {
 	o.TimeFormat = &v
 }
 

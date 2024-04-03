@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Units** | Pointer to **string** | Default units for glucose measurements across the server. | [optional] 
-**TimeFormat** | Pointer to **string** | Default time format | [optional] 
+**TimeFormat** | Pointer to **float32** | Default time format | [optional] 
 **CustomTitle** | Pointer to **string** | Default custom title to be displayed system wide. | [optional] 
 **NightMode** | Pointer to **bool** | Should Night mode be enabled by default? | [optional] 
 **Theme** | Pointer to **string** | Default theme to be displayed system wide, &#x60;default&#x60;, &#x60;colors&#x60;, &#x60;colorblindfriendly&#x60;. | [optional] 
@@ -70,20 +70,20 @@ HasUnits returns a boolean if a field has been set.
 
 ### GetTimeFormat
 
-`func (o *Settings) GetTimeFormat() string`
+`func (o *Settings) GetTimeFormat() float32`
 
 GetTimeFormat returns the TimeFormat field if non-nil, zero value otherwise.
 
 ### GetTimeFormatOk
 
-`func (o *Settings) GetTimeFormatOk() (*string, bool)`
+`func (o *Settings) GetTimeFormatOk() (*float32, bool)`
 
 GetTimeFormatOk returns a tuple with the TimeFormat field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetTimeFormat
 
-`func (o *Settings) SetTimeFormat(v string)`
+`func (o *Settings) SetTimeFormat(v float32)`
 
 SetTimeFormat sets TimeFormat field to given value.
 

@@ -1076,7 +1076,7 @@ components:
         apiEnabled: true
         head: head
         settings:
-          alarmTimeagoUrgentMins: 6.027456183070403
+          alarmTimeagoUrgentMins: 1.4658129805029452
           alarmHigh: true
           alarmTimeagoUrgent: true
           customTitle: customTitle
@@ -1090,18 +1090,18 @@ components:
           alarmLow: true
           thresholds:
             bg_target_top: 5
-            bg_low: 2
-            bg_target_bottom: 5
-            bg_high: 1
+            bg_low: 7
+            bg_target_bottom: 2
+            bg_high: 5
           alarmTimeagoWarn: true
           enable:
           - enable
           - enable
-          timeFormat: "12"
+          timeFormat: 0.8008281904610115
           alarmUrgentLow: true
           theme: theme
           showRawbg: showRawbg
-          alarmTimeagoWarnMins: 0.8008281904610115
+          alarmTimeagoWarnMins: 6.027456183070403
           nightMode: true
         name: name
         extendedSettings: ""
@@ -1129,7 +1129,7 @@ components:
           description: Extended settings of client side plugins
     Settings:
       example:
-        alarmTimeagoUrgentMins: 6.027456183070403
+        alarmTimeagoUrgentMins: 1.4658129805029452
         alarmHigh: true
         alarmTimeagoUrgent: true
         customTitle: customTitle
@@ -1143,18 +1143,18 @@ components:
         alarmLow: true
         thresholds:
           bg_target_top: 5
-          bg_low: 2
-          bg_target_bottom: 5
-          bg_high: 1
+          bg_low: 7
+          bg_target_bottom: 2
+          bg_high: 5
         alarmTimeagoWarn: true
         enable:
         - enable
         - enable
-        timeFormat: "12"
+        timeFormat: 0.8008281904610115
         alarmUrgentLow: true
         theme: theme
         showRawbg: showRawbg
-        alarmTimeagoWarnMins: 0.8008281904610115
+        alarmTimeagoWarnMins: 6.027456183070403
         nightMode: true
       properties:
         units:
@@ -1163,9 +1163,9 @@ components:
         timeFormat:
           description: Default time format
           enum:
-          - "12"
-          - "24"
-          type: string
+          - 12
+          - 24
+          type: number
         customTitle:
           description: Default custom title to be displayed system wide.
           type: string
@@ -1232,9 +1232,9 @@ components:
     Threshold:
       example:
         bg_target_top: 5
-        bg_low: 2
-        bg_target_bottom: 5
-        bg_high: 1
+        bg_low: 7
+        bg_target_bottom: 2
+        bg_high: 5
       properties:
         bg_high:
           description: High BG range.

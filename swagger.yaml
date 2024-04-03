@@ -951,7 +951,7 @@ components:
           type: string
           description: Default units for glucose measurements across the server.
         timeFormat:
-          type: string
+          type: number
           description: Default time format
           enum:
             - 12
